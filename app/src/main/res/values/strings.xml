@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">AirTicketsSearchApp</string>
+    <string name="empty" />
+
+    <!-- bottom navigation titles -->
+    <string name="navigation_main_label">Авиабилеты</string>
+    <string name="navigation_main_description">Кнопка перехода на главный экран</string>
+    <string name="navigation_hotels_label">Отели</string>
+    <string name="navigation_hotels_description">Кнопка перехода на экран выбора отелей</string>
+    <string name="navigation_shortly_label">Короче</string>
+    <string name="navigation_shortly_description">Кнопка перехода на экран короче</string>
+    <string name="navigation_subscribes_label">Подписки</string>
+    <string name="navigation_subscribes_description">Кнопка перехода на экран подписок</string>
+    <string name="navigation_profile_label">Профиль</string>
+    <string name="navigation_profile_description">Кнопка перехода на экран профиля</string>
+
+    <!-- main screen -->
+    <string name="main_title">Поиск дешевых\nавиабилетов</string>
+    <string name="main_music_title">Музыкально отлететь</string>
+    <string name="main_text_field_from_placeholder">Откуда - Москва</string>
+    <string name="main_text_field_to_placeholder">Куда - Турция</string>
+    <string name="main_offer_price">от %s %s ₽ </string>
+    <string name="main_hint_difficult_road">Сложный\nмаршрут</string>
+    <string name="main_hint_somewhere">Куда-нибудь</string>
+    <string name="main_hint_weekend">Выходные</string>
+    <string name="main_hint_hot_tickets">Горячие\nбилеты</string>
+    <string name="main_popular_istanbul">Стамбул</string>
+    <string name="main_popular_sochi">Сочи</string>
+    <string name="main_popular_phuket">Пхукет</string>
+    <string name="main_popular_description">Популярное направление</string>
+
+    <!-- empty screen -->
+    <string name="empty_title">Экран в разработке</string>
+    <string name="empty_text">Возвращайтесь позже, здесь обязательно будет что-то интересное!</string>
+
+    <!-- ui error messages -->
+    <string name="unknown_error_message">Unknown error</string>
+    <string name="route_is_null_error_message">Navigation Route is null</string>
+</resources>
