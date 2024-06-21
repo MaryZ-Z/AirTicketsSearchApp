@@ -103,12 +103,12 @@ fun MainScreen(navigate: (String) -> Unit) {
         SearchBottomSheet(
             onDismissClick = viewModel::hideSearchBottomSheet,
             onHintClick = {
-                viewModel::updateTo
+                viewModel.updateTo(it)
                 navigate(Screen.Empty.route)
             },
             onPopularClick = {
-                viewModel::updateTo
-                navigate
+                viewModel.updateTo(it)
+                navigate(Screen.Empty.route)
             },
             fromText = viewModel.from,
             toText = viewModel.to,
