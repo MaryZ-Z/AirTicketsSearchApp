@@ -102,16 +102,20 @@ fun MainScreen(navigate: (String) -> Unit) {
     if (viewModel.showSearchBottomSheet) {
         SearchBottomSheet(
             onDismissClick = viewModel::hideSearchBottomSheet,
-            onHintClick = { navigate(Screen.Empty.route) },
-            onPopularClick = {
+            onHintClick = {
                 viewModel::updateTo
                 navigate(Screen.Empty.route)
+            },
+            onPopularClick = {
+                viewModel::updateTo
+                navigate
             },
             fromText = viewModel.from,
             toText = viewModel.to,
             onFromTextChange = viewModel::updateFrom,
             onToTextChange = viewModel::updateTo,
-            onIconClick = viewModel::clearTo
+            onIconClick = viewModel::clearTo,
+            navigate = navigate
         )
     }
 }
@@ -331,13 +335,14 @@ fun OfferCard(
 @Composable
 fun SearchBottomSheet(
     onDismissClick: () -> Unit,
-    onHintClick: () -> Unit,
+    onHintClick: (String) -> Unit,
     onIconClick: () -> Unit,
     onPopularClick: (String) -> Unit,
     fromText: String,
     toText: String,
     onFromTextChange: (String) -> Unit,
-    onToTextChange: (String) -> Unit
+    onToTextChange: (String) -> Unit,
+    navigate: (String) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
@@ -385,7 +390,7 @@ fun SearchBottomSheet(
                 )
             }
             Spacer(modifier = Modifier.height(24.dp))
-            RowHints(onClick = onHintClick)
+            RowHints(onClick = onHintClick, navigate = navigate)
             Spacer(modifier = Modifier.height(30.dp))
             Popular(onClick = onPopularClick)
         }
@@ -394,9 +399,12 @@ fun SearchBottomSheet(
 
 @Composable
 fun RowHints(
-    onClick: () -> Unit
+    onClick: (String) -> Unit,
+    navigate: (String) -> Unit
 ) {
     val hints = Hints.entries
+    val context = LocalContext.current
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -408,7 +416,13 @@ fun RowHints(
             Hint(
                 iconResId = hint.iconResId,
                 textResId = hint.textResId,
-                onClick = onClick
+                onClick = {
+                    if (hint.ordinal == 1) {
+                        onClick(context.getString(hint.textResId))
+                    } else {
+                        navigate
+                    }
+                }
             )
         }
     }
