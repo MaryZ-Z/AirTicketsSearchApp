@@ -31,7 +31,8 @@
 
     <!-- empty screen -->
     <string name="empty_title">Экран в разработке</string>
-    <string name="empty_text">Возвращайтесь позже, здесь обязательно будет что-то интересное!</string>
+    <string name="empty_text">Возвращайтесь позже, здесь обязательно будет что-то интересное!\nА пока можете вернуться назад</string>
+    <string name="empty_back_button">Вернуться</string>
 
     <!-- ui error messages -->
     <string name="unknown_error_message">Unknown error</string>

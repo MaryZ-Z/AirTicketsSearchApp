@@ -11,11 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.android.airticketssearchapp.R
+import com.android.airticketssearchapp.ui.components.Button
 
 @Composable
-fun EmptyScreen() {
+fun EmptyScreen(navigate: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -30,7 +32,12 @@ fun EmptyScreen() {
         Text(
             text = stringResource(id = R.string.empty_text),
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.secondary
+            color = MaterialTheme.colorScheme.secondary,
+            textAlign = TextAlign.Center
+        )
+        Button(
+            textResId = R.string.empty_back_button,
+            onClick = navigate
         )
     }
 }

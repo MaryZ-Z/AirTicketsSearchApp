@@ -32,12 +32,12 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -103,7 +103,10 @@ fun MainScreen(navigate: (String) -> Unit) {
         SearchBottomSheet(
             onDismissClick = viewModel::hideSearchBottomSheet,
             onHintClick = { navigate(Screen.Empty.route) },
-            onPopularClick = { viewModel.updateTo("") },
+            onPopularClick = {
+                viewModel::updateTo
+                navigate(Screen.Empty.route)
+            },
             fromText = viewModel.from,
             toText = viewModel.to,
             onFromTextChange = viewModel::updateFrom,
@@ -330,14 +333,13 @@ fun SearchBottomSheet(
     onDismissClick: () -> Unit,
     onHintClick: () -> Unit,
     onIconClick: () -> Unit,
-    onPopularClick: () -> Unit,
+    onPopularClick: (String) -> Unit,
     fromText: String,
     toText: String,
     onFromTextChange: (String) -> Unit,
     onToTextChange: (String) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val scope = rememberCoroutineScope()
 
     ModalBottomSheet(
         onDismissRequest = onDismissClick,
@@ -385,7 +387,7 @@ fun SearchBottomSheet(
             Spacer(modifier = Modifier.height(24.dp))
             RowHints(onClick = onHintClick)
             Spacer(modifier = Modifier.height(30.dp))
-            Popular(onClick = { onPopularClick })
+            Popular(onClick = onPopularClick)
         }
     }
 }
@@ -441,6 +443,7 @@ fun Popular(
     onClick: (String) -> Unit
 ) {
     val populars = Popular.entries
+    val context = LocalContext.current
 
     Card(
         modifier = Modifier
@@ -458,7 +461,7 @@ fun Popular(
         ) {
             populars.forEach { popular ->
                 PopularRow(
-                    onClick = { onClick(stringResource(id = popular.textResId)) },
+                    onClick = { onClick(context.getString(popular.textResId)) },
                     imageResId = popular.imageResId,
                     textResId = popular.textResId
                 )

@@ -2,7 +2,6 @@ package com.android.airticketssearchapp.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,10 +18,10 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.union
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -34,15 +33,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
@@ -67,6 +60,7 @@ import com.android.airticketssearchapp.ui.theme.Blue
 import com.android.airticketssearchapp.ui.theme.Grey1
 import com.android.airticketssearchapp.ui.theme.Grey5
 import com.android.airticketssearchapp.ui.theme.Grey7
+import com.android.airticketssearchapp.ui.theme.White
 
 @Composable
 fun AirTicketsSearchApp() {
@@ -219,6 +213,10 @@ fun AirTicketsSearchNavHost(
             composable(route = Screen.Main.route) {
                 MainScreen(navigate = navController::navigate)
             }
+
+            composable(route = Screen.Empty.route) {
+                EmptyScreen(navigate = navController::popBackStack)
+            }
         }
 
         navigation(
@@ -226,7 +224,7 @@ fun AirTicketsSearchNavHost(
             route = BottomNavigation.Hotels.route
         ) {
             composable(route = Screen.Hotels.route) {
-                EmptyScreen()
+                EmptyScreen(navigate = navController::popBackStack)
             }
         }
 
@@ -235,7 +233,7 @@ fun AirTicketsSearchNavHost(
             route = BottomNavigation.Shortly.route
         ) {
             composable(route = Screen.Shortly.route) {
-                EmptyScreen()
+                EmptyScreen(navigate = navController::popBackStack)
             }
         }
 
@@ -244,7 +242,7 @@ fun AirTicketsSearchNavHost(
             route = BottomNavigation.Subscribes.route
         ) {
             composable(route = Screen.Subscribes.route) {
-                EmptyScreen()
+                EmptyScreen(navigate = navController::popBackStack)
             }
         }
 
@@ -253,7 +251,7 @@ fun AirTicketsSearchNavHost(
             route = BottomNavigation.Profile.route
         ) {
             composable(route = Screen.Profile.route) {
-                EmptyScreen()
+                EmptyScreen(navigate = navController::popBackStack)
             }
         }
     }
@@ -265,13 +263,14 @@ fun Button(textResId: Int, onClick: () -> Unit) {
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 20.dp, end = 20.dp, bottom = 24.dp),
-        contentPadding = PaddingValues(vertical = 16.5.dp)
+            .padding(all = 16.dp),
+        shape = RoundedCornerShape(16.dp),
+        contentPadding = PaddingValues(vertical = 12.dp)
     ) {
         Text(
             text = stringResource(id = textResId),
             style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.surface
+            color = White
         )
     }
 }
