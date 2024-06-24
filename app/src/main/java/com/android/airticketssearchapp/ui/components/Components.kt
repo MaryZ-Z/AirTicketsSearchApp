@@ -55,7 +55,6 @@ import com.android.airticketssearchapp.extensions.currentScreen
 import com.android.airticketssearchapp.extensions.hasRouteInHierarchy
 import com.android.airticketssearchapp.navigation.BottomNavigation
 import com.android.airticketssearchapp.navigation.Screen
-import com.android.airticketssearchapp.ui.common.UiError
 import com.android.airticketssearchapp.ui.empty.EmptyScreen
 import com.android.airticketssearchapp.ui.main.MainScreen
 import com.android.airticketssearchapp.ui.searchresult.SearchResultScreen
@@ -84,7 +83,8 @@ fun AirTicketsSearchApp() {
             topBar = {
                 Column {
                     AnimatedVisibility(visible = currentScreen.titleResId != null) {
-                        TopAppBar(title = currentScreen.titleResId?.let { stringResource(it) } ?: "")
+                        TopAppBar(title = currentScreen.titleResId?.let { stringResource(it) }
+                            ?: "")
                     }
                 }
             },
@@ -289,99 +289,6 @@ fun Button(textResId: Int, onClick: () -> Unit) {
             color = White
         )
     }
-}
-
-@Composable
-fun TransparentTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    placeholderResId: Int,
-    isEnabled: Boolean,
-    onClick: () -> Unit
-) {
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = Modifier.clickable(onClick = onClick),
-        enabled = isEnabled,
-        textStyle = MaterialTheme.typography.labelMedium,
-        placeholder = {
-            Text(text = stringResource(id = placeholderResId))
-        },
-        maxLines = 1,
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = Grey4,
-            unfocusedContainerColor = Grey4,
-            disabledContainerColor = Grey4,
-            focusedTextColor = White,
-            unfocusedTextColor = White,
-            disabledTextColor = White,
-            focusedPlaceholderColor = Grey6,
-            unfocusedPlaceholderColor = Grey6,
-            disabledPlaceholderColor = Grey6,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent
-        )
-    )
-}
-
-@Composable
-fun TransparentTextFieldWithIcons(
-    value: String,
-    onValueChange: (String) -> Unit,
-    placeholderResId: Int,
-    leadingIconResId: Int?,
-    trailingIconResId: Int?,
-    onIconClick: () -> Unit,
-    tint: Color,
-    isEnabled: Boolean
-) {
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        textStyle = MaterialTheme.typography.labelMedium,
-        modifier = Modifier.fillMaxWidth(),
-        enabled = isEnabled,
-        placeholder = {
-            Text(text = stringResource(id = placeholderResId))
-        },
-        leadingIcon = {
-            if (leadingIconResId != null) {
-                Icon(
-                    painter = painterResource(id = leadingIconResId),
-                    contentDescription = null,
-                    tint = tint
-                )
-            }
-        },
-        trailingIcon = {
-            if (trailingIconResId != null) {
-                IconButton(onClick = onIconClick) {
-                    Icon(
-                        painter = painterResource(id = trailingIconResId),
-                        contentDescription = null,
-                        tint = Grey6
-                    )
-                }
-            }
-        },
-        maxLines = 1,
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = Grey3,
-            unfocusedContainerColor = Grey3,
-            disabledContainerColor = Grey3,
-            focusedTextColor = White,
-            unfocusedTextColor = White,
-            disabledTextColor = White,
-            focusedPlaceholderColor = Grey6,
-            unfocusedPlaceholderColor = Grey6,
-            disabledPlaceholderColor = Grey6,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent
-        )
-    )
 }
 
 @Composable

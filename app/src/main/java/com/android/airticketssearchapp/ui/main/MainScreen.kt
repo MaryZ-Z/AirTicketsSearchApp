@@ -24,9 +24,12 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -46,8 +49,6 @@ import com.android.airticketssearchapp.data.Offer
 import com.android.airticketssearchapp.data.OfferImage
 import com.android.airticketssearchapp.data.Popular
 import com.android.airticketssearchapp.navigation.Screen
-import com.android.airticketssearchapp.ui.components.TransparentTextField
-import com.android.airticketssearchapp.ui.components.TransparentTextFieldWithIcons
 import com.android.airticketssearchapp.ui.theme.Black
 import com.android.airticketssearchapp.ui.theme.Grey2
 import com.android.airticketssearchapp.ui.theme.Grey3
@@ -62,6 +63,7 @@ fun MainScreen(navigate: (String) -> Unit) {
     val viewModel: MainViewModel = hiltViewModel()
     val from = viewModel.from
     val to = viewModel.to
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -105,7 +107,12 @@ fun MainScreen(navigate: (String) -> Unit) {
             onDismissClick = viewModel::hideSearchBottomSheet,
             onPopularClick = {
                 viewModel.updateTo(it)
-                navigate(Screen.SearchResult.navigate(from, it))
+                navigate(
+                    Screen.SearchResult.navigate(
+                        from.ifEmpty { context.getString(R.string.main_text_field_from_placeholder) },
+                        it
+                    )
+                )
             },
             fromText = from,
             toText = to,
@@ -314,6 +321,99 @@ fun SearchBottomSheet(
 }
 
 @Composable
+fun TransparentTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholderResId: Int,
+    isEnabled: Boolean,
+    onClick: () -> Unit
+) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = Modifier.clickable(onClick = onClick),
+        enabled = isEnabled,
+        textStyle = MaterialTheme.typography.labelMedium,
+        placeholder = {
+            Text(text = stringResource(id = placeholderResId))
+        },
+        maxLines = 1,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Grey4,
+            unfocusedContainerColor = Grey4,
+            disabledContainerColor = Grey4,
+            focusedTextColor = White,
+            unfocusedTextColor = White,
+            disabledTextColor = White,
+            focusedPlaceholderColor = Grey6,
+            unfocusedPlaceholderColor = Grey6,
+            disabledPlaceholderColor = Grey6,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
+        )
+    )
+}
+
+@Composable
+fun TransparentTextFieldWithIcons(
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholderResId: Int,
+    leadingIconResId: Int?,
+    trailingIconResId: Int?,
+    onIconClick: () -> Unit,
+    tint: Color,
+    isEnabled: Boolean
+) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        textStyle = MaterialTheme.typography.labelMedium,
+        modifier = Modifier.fillMaxWidth(),
+        enabled = isEnabled,
+        placeholder = {
+            Text(text = stringResource(id = placeholderResId))
+        },
+        leadingIcon = {
+            if (leadingIconResId != null) {
+                Icon(
+                    painter = painterResource(id = leadingIconResId),
+                    contentDescription = null,
+                    tint = tint
+                )
+            }
+        },
+        trailingIcon = {
+            if (trailingIconResId != null) {
+                IconButton(onClick = onIconClick) {
+                    Icon(
+                        painter = painterResource(id = trailingIconResId),
+                        contentDescription = null,
+                        tint = Grey6
+                    )
+                }
+            }
+        },
+        maxLines = 1,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Grey3,
+            unfocusedContainerColor = Grey3,
+            disabledContainerColor = Grey3,
+            focusedTextColor = White,
+            unfocusedTextColor = White,
+            disabledTextColor = White,
+            focusedPlaceholderColor = Grey6,
+            unfocusedPlaceholderColor = Grey6,
+            disabledPlaceholderColor = Grey6,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
+        )
+    )
+}
+
+@Composable
 fun RowHints(
     navigate: (String) -> Unit,
     fromText: String
@@ -334,9 +434,11 @@ fun RowHints(
                 textResId = hint.textResId,
                 onClick = {
                     if (hint.ordinal == 1) {
-                        navigate(Screen.SearchResult.navigate(
-                            from = fromText,
-                            to = context.getString(hint.textResId))
+                        navigate(
+                            Screen.SearchResult.navigate(
+                                fromText.ifEmpty { context.getString(R.string.main_text_field_from_placeholder) },
+                                context.getString(hint.textResId)
+                            )
                         )
                     } else {
                         navigate(Screen.Empty.route)

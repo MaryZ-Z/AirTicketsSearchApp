@@ -21,7 +21,7 @@
     <string name="main_text_field_to_placeholder">Куда - Турция</string>
     <string name="main_offer_price">от %s %s ₽ </string>
     <string name="main_hint_difficult_road">Сложный\nмаршрут</string>
-    <string name="main_hint_somewhere">Куда-нибудь</string>
+    <string name="main_hint_somewhere">Куда угодно</string>
     <string name="main_hint_weekend">Выходные</string>
     <string name="main_hint_hot_tickets">Горячие\nбилеты</string>
     <string name="main_popular_istanbul">Стамбул</string>

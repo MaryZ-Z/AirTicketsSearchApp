@@ -25,4 +25,10 @@ class SearchResultViewModel @Inject constructor(
     fun clearTo() {
         localTo = ""
     }
+
+    fun switchFromTo() {
+        val switch = to
+        localTo = from
+        localFrom = switch
+    }
 }
