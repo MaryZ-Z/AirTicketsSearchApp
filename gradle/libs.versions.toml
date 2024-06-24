@@ -34,6 +34,8 @@ firebaseAppDistributionPlugin = "5.0.0"
 versionCatalogVersionsPlugin = "0.47.0"
 versionCatalogUpdatePlugin = "0.8.0"
 firebaseCrashlyticsBuildtools = "3.0.0"
+datastoreCoreAndroid = "1.1.1"
+datastoreCoreJvm = "1.1.1"
 
 [libraries]
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
@@ -86,6 +88,8 @@ compose-ui-junit = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
+androidx-datastore-core-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastoreCoreAndroid" }
+androidx-datastore-core-jvm = { group = "androidx.datastore", name = "datastore-core-jvm", version.ref = "datastoreCoreJvm" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

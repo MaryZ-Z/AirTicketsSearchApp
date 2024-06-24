@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.android.airticketssearchapp.data.AirTicketsSearchRepository
+import com.android.airticketssearchapp.data.repository.AirTicketsSearchRepository
 import com.android.airticketssearchapp.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -27,8 +27,8 @@ class SearchResultViewModel @Inject constructor(
     }
 
     fun switchFromTo() {
-        val switch = to
-        localTo = from
+        val switch = localTo
+        localTo = localFrom
         localFrom = switch
     }
 }

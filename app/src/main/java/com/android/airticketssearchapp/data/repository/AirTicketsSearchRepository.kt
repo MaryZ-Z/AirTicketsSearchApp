@@ -1,4 +1,4 @@
-package com.android.airticketssearchapp.data
+package com.android.airticketssearchapp.data.repository
 
 import com.android.airticketssearchapp.restapi.AirTicketsSearchService
 import javax.inject.Inject

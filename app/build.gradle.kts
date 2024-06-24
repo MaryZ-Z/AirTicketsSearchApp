@@ -79,6 +79,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines)
     implementation(libs.chucker)
     implementation(libs.moshi)
+    implementation(libs.androidx.datastore)
     ksp(libs.moshi.codegen)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.moshi)

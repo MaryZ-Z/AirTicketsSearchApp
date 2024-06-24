@@ -5,8 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.android.airticketssearchapp.data.AirTicketsSearchRepository
+import com.android.airticketssearchapp.data.repository.AirTicketsSearchRepository
 import com.android.airticketssearchapp.data.OffersResponse
+import com.android.airticketssearchapp.data.repository.DataStoreRepository
 import com.android.airticketssearchapp.ui.common.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -15,11 +16,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val airTicketsSearchRepository: AirTicketsSearchRepository
+    private val airTicketsSearchRepository: AirTicketsSearchRepository,
+    private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
+    private val savedFrom = dataStoreRepository.getFrom() ?: ""
     var state by mutableStateOf<UiState<OffersResponse>>(UiState.Loading)
         private set
-    var from by mutableStateOf("")
+    var from by mutableStateOf(savedFrom)
         private set
     var to by mutableStateOf("")
         private set
@@ -41,6 +44,9 @@ class MainViewModel @Inject constructor(
             from.filter { it.isLetter() }
         } else {
             this.from.filter { it.isLetter() }
+        }
+        viewModelScope.launch {
+            dataStoreRepository.saveLastFrom(from)
         }
     }
 
