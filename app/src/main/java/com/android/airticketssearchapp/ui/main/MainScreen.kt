@@ -24,12 +24,9 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -49,6 +46,8 @@ import com.android.airticketssearchapp.data.Offer
 import com.android.airticketssearchapp.data.OfferImage
 import com.android.airticketssearchapp.data.Popular
 import com.android.airticketssearchapp.navigation.Screen
+import com.android.airticketssearchapp.ui.components.TransparentTextField
+import com.android.airticketssearchapp.ui.components.TransparentTextFieldWithIcons
 import com.android.airticketssearchapp.ui.theme.Black
 import com.android.airticketssearchapp.ui.theme.Grey2
 import com.android.airticketssearchapp.ui.theme.Grey3
@@ -61,6 +60,8 @@ import com.android.airticketssearchapp.ui.theme.White
 @Composable
 fun MainScreen(navigate: (String) -> Unit) {
     val viewModel: MainViewModel = hiltViewModel()
+    val from = viewModel.from
+    val to = viewModel.to
 
     Column(
         modifier = Modifier
@@ -78,10 +79,10 @@ fun MainScreen(navigate: (String) -> Unit) {
         Spacer(modifier = Modifier.height(32.dp))
         TextFields(
             onClick = viewModel::showSearchBottomSheet,
-            fromText = viewModel.from,
-            toText = viewModel.to,
-            onFromTextChange = { },
-            onToTextChange = { }
+            fromText = from,
+            toText = to,
+            onFromTextChange = viewModel::updateFrom,
+            onToTextChange = viewModel::updateTo
         )
         Spacer(modifier = Modifier.height(35.dp))
         Text(
@@ -102,16 +103,12 @@ fun MainScreen(navigate: (String) -> Unit) {
     if (viewModel.showSearchBottomSheet) {
         SearchBottomSheet(
             onDismissClick = viewModel::hideSearchBottomSheet,
-            onHintClick = {
-                viewModel.updateTo(it)
-                navigate(Screen.Empty.route)
-            },
             onPopularClick = {
                 viewModel.updateTo(it)
-                navigate(Screen.Empty.route)
+                navigate(Screen.SearchResult.navigate(from, it))
             },
-            fromText = viewModel.from,
-            toText = viewModel.to,
+            fromText = from,
+            toText = to,
             onFromTextChange = viewModel::updateFrom,
             onToTextChange = viewModel::updateTo,
             onIconClick = viewModel::clearTo,
@@ -139,7 +136,6 @@ fun TextFields(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(all = 16.dp)
-                .clickable(onClick = onClick)
                 .shadow(
                     elevation = 4.dp,
                     spotColor = Black,
@@ -171,13 +167,17 @@ fun TextFields(
                     TransparentTextField(
                         value = fromText,
                         onValueChange = onFromTextChange,
-                        placeholderResId = R.string.main_text_field_from_placeholder
+                        placeholderResId = R.string.main_text_field_from_placeholder,
+                        isEnabled = true,
+                        onClick = { }
                     )
                     HorizontalDivider(thickness = 1.dp, color = Grey5)
                     TransparentTextField(
                         value = toText,
                         onValueChange = onToTextChange,
-                        placeholderResId = R.string.main_text_field_to_placeholder
+                        placeholderResId = R.string.main_text_field_to_placeholder,
+                        isEnabled = false,
+                        onClick = onClick
                     )
                 }
             }
@@ -185,91 +185,6 @@ fun TextFields(
     }
 }
 
-@Composable
-fun TransparentTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    placeholderResId: Int
-) {
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        enabled = false,
-        textStyle = MaterialTheme.typography.labelMedium,
-        placeholder = {
-            Text(text = stringResource(id = placeholderResId))
-        },
-        maxLines = 1,
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = Grey4,
-            unfocusedContainerColor = Grey4,
-            disabledContainerColor = Grey4,
-            focusedTextColor = White,
-            unfocusedTextColor = White,
-            disabledTextColor = White,
-            focusedPlaceholderColor = Grey6,
-            unfocusedPlaceholderColor = Grey6,
-            disabledPlaceholderColor = Grey6,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent
-        )
-    )
-}
-
-@Composable
-fun TransparentTextFieldWithIcons(
-    value: String,
-    onValueChange: (String) -> Unit,
-    placeholderResId: Int,
-    leadingIconResId: Int,
-    trailingIconResId: Int?,
-    onIconClick: () -> Unit,
-    tint: Color
-) {
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        textStyle = MaterialTheme.typography.labelMedium,
-        modifier = Modifier.fillMaxWidth(),
-        placeholder = {
-            Text(text = stringResource(id = placeholderResId))
-        },
-        leadingIcon = {
-            Icon(
-                painter = painterResource(id = leadingIconResId),
-                contentDescription = null,
-                tint = tint
-            )
-        },
-        trailingIcon = {
-            if (trailingIconResId != null) {
-                IconButton(onClick = onIconClick) {
-                    Icon(
-                        painter = painterResource(id = trailingIconResId),
-                        contentDescription = null,
-                        tint = Grey6
-                    )
-                }
-            }
-        },
-        maxLines = 1,
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = Grey3,
-            unfocusedContainerColor = Grey3,
-            disabledContainerColor = Grey3,
-            focusedTextColor = White,
-            unfocusedTextColor = White,
-            disabledTextColor = White,
-            focusedPlaceholderColor = Grey6,
-            unfocusedPlaceholderColor = Grey6,
-            disabledPlaceholderColor = Grey6,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent
-        )
-    )
-}
 
 @Composable
 fun RowOffers(
@@ -335,7 +250,6 @@ fun OfferCard(
 @Composable
 fun SearchBottomSheet(
     onDismissClick: () -> Unit,
-    onHintClick: (String) -> Unit,
     onIconClick: () -> Unit,
     onPopularClick: (String) -> Unit,
     fromText: String,
@@ -372,7 +286,8 @@ fun SearchBottomSheet(
                     leadingIconResId = R.drawable.ic_plane,
                     trailingIconResId = null,
                     tint = Color.Unspecified,
-                    onIconClick = { }
+                    onIconClick = { },
+                    isEnabled = false
                 )
                 HorizontalDivider(
                     modifier = Modifier.padding(horizontal = 16.dp),
@@ -386,11 +301,12 @@ fun SearchBottomSheet(
                     leadingIconResId = R.drawable.ic_search,
                     trailingIconResId = R.drawable.ic_clear,
                     tint = White,
-                    onIconClick = onIconClick
+                    onIconClick = onIconClick,
+                    isEnabled = true
                 )
             }
             Spacer(modifier = Modifier.height(24.dp))
-            RowHints(onClick = onHintClick, navigate = navigate)
+            RowHints(navigate = navigate, fromText = fromText)
             Spacer(modifier = Modifier.height(30.dp))
             Popular(onClick = onPopularClick)
         }
@@ -399,8 +315,8 @@ fun SearchBottomSheet(
 
 @Composable
 fun RowHints(
-    onClick: (String) -> Unit,
-    navigate: (String) -> Unit
+    navigate: (String) -> Unit,
+    fromText: String
 ) {
     val hints = Hints.entries
     val context = LocalContext.current
@@ -418,9 +334,12 @@ fun RowHints(
                 textResId = hint.textResId,
                 onClick = {
                     if (hint.ordinal == 1) {
-                        onClick(context.getString(hint.textResId))
+                        navigate(Screen.SearchResult.navigate(
+                            from = fromText,
+                            to = context.getString(hint.textResId))
+                        )
                     } else {
-                        navigate
+                        navigate(Screen.Empty.route)
                     }
                 }
             )

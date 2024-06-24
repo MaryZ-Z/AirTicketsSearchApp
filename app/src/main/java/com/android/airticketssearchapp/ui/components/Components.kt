@@ -25,14 +25,18 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -54,11 +58,15 @@ import com.android.airticketssearchapp.navigation.Screen
 import com.android.airticketssearchapp.ui.common.UiError
 import com.android.airticketssearchapp.ui.empty.EmptyScreen
 import com.android.airticketssearchapp.ui.main.MainScreen
+import com.android.airticketssearchapp.ui.searchresult.SearchResultScreen
 import com.android.airticketssearchapp.ui.theme.AirTicketsSearchAppTheme
 import com.android.airticketssearchapp.ui.theme.Black
 import com.android.airticketssearchapp.ui.theme.Blue
 import com.android.airticketssearchapp.ui.theme.Grey1
+import com.android.airticketssearchapp.ui.theme.Grey3
+import com.android.airticketssearchapp.ui.theme.Grey4
 import com.android.airticketssearchapp.ui.theme.Grey5
+import com.android.airticketssearchapp.ui.theme.Grey6
 import com.android.airticketssearchapp.ui.theme.Grey7
 import com.android.airticketssearchapp.ui.theme.White
 
@@ -76,9 +84,7 @@ fun AirTicketsSearchApp() {
             topBar = {
                 Column {
                     AnimatedVisibility(visible = currentScreen.titleResId != null) {
-
-                        TopAppBar(title = currentScreen.titleResId?.let { stringResource(it) }
-                            ?: "")
+                        TopAppBar(title = currentScreen.titleResId?.let { stringResource(it) } ?: "")
                     }
                 }
             },
@@ -214,6 +220,16 @@ fun AirTicketsSearchNavHost(
                 MainScreen(navigate = navController::navigate)
             }
 
+            composable(
+                route = Screen.SearchResult.route,
+                arguments = Screen.SearchResult.arguments
+            ) {
+                SearchResultScreen(
+                    navigate = navController::navigate,
+                    navigateBack = navController::popBackStack
+                )
+            }
+
             composable(route = Screen.Empty.route) {
                 EmptyScreen(navigate = navController::popBackStack)
             }
@@ -276,18 +292,101 @@ fun Button(textResId: Int, onClick: () -> Unit) {
 }
 
 @Composable
-fun Loading() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        CircularProgressIndicator()
-    }
+fun TransparentTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholderResId: Int,
+    isEnabled: Boolean,
+    onClick: () -> Unit
+) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = Modifier.clickable(onClick = onClick),
+        enabled = isEnabled,
+        textStyle = MaterialTheme.typography.labelMedium,
+        placeholder = {
+            Text(text = stringResource(id = placeholderResId))
+        },
+        maxLines = 1,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Grey4,
+            unfocusedContainerColor = Grey4,
+            disabledContainerColor = Grey4,
+            focusedTextColor = White,
+            unfocusedTextColor = White,
+            disabledTextColor = White,
+            focusedPlaceholderColor = Grey6,
+            unfocusedPlaceholderColor = Grey6,
+            disabledPlaceholderColor = Grey6,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
+        )
+    )
 }
 
 @Composable
-fun Error(uiError: UiError) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(
-            text = uiError.message ?: stringResource(id = uiError.messageRes),
-            modifier = Modifier.padding(horizontal = 20.dp)
+fun TransparentTextFieldWithIcons(
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholderResId: Int,
+    leadingIconResId: Int?,
+    trailingIconResId: Int?,
+    onIconClick: () -> Unit,
+    tint: Color,
+    isEnabled: Boolean
+) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        textStyle = MaterialTheme.typography.labelMedium,
+        modifier = Modifier.fillMaxWidth(),
+        enabled = isEnabled,
+        placeholder = {
+            Text(text = stringResource(id = placeholderResId))
+        },
+        leadingIcon = {
+            if (leadingIconResId != null) {
+                Icon(
+                    painter = painterResource(id = leadingIconResId),
+                    contentDescription = null,
+                    tint = tint
+                )
+            }
+        },
+        trailingIcon = {
+            if (trailingIconResId != null) {
+                IconButton(onClick = onIconClick) {
+                    Icon(
+                        painter = painterResource(id = trailingIconResId),
+                        contentDescription = null,
+                        tint = Grey6
+                    )
+                }
+            }
+        },
+        maxLines = 1,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Grey3,
+            unfocusedContainerColor = Grey3,
+            disabledContainerColor = Grey3,
+            focusedTextColor = White,
+            unfocusedTextColor = White,
+            disabledTextColor = White,
+            focusedPlaceholderColor = Grey6,
+            unfocusedPlaceholderColor = Grey6,
+            disabledPlaceholderColor = Grey6,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
         )
+    )
+}
+
+@Composable
+fun Loading() {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator()
     }
 }

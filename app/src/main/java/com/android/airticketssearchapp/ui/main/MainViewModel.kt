@@ -38,17 +38,19 @@ class MainViewModel @Inject constructor(
 
     fun updateFrom(from: String) {
         this.from = if (!from.contains(ignoredRegex)) {
-            from.filter { it.isLetter() }
+            from    /*  .filter { it.isLetter() }
+                        сначала поставила фильтр на символы, а потом поняла, что в таком случае
+                        нельзя вставить в строку "куда-нибудь", тз составлено некорректно*/
         } else {
-            this.from.filter { it.isLetter() }
+            this.from
         }
     }
 
     fun updateTo(to: String) {
         this.to = if (!to.contains(ignoredRegex)) {
-            to.filter { it.isLetter() }
+            to
         } else {
-            this.to.filter { it.isLetter() }
+            this.to
         }
     }
 

@@ -7,28 +7,26 @@ import com.android.airticketssearchapp.R
 
 sealed class Screen(
     val route: String,
-    @StringRes val titleResId: Int? = null
+    @StringRes val titleResId: Int? = null,
+    isTopBarVisible: Boolean = true
 ) {
 
     data object Empty : Screen(route = "empty")
 
     data object Main : Screen(route = "main")
 
-    class CameraStream : Screen(
-        route = route
-    ) {
+    class SearchResult : Screen(route = route, isTopBarVisible = false) {
         companion object {
-            private const val ROUTE = "camera_stream"
-            const val NAME = "name"
-            const val LOCATION = "location"
-            const val RTSP_LINK = "rtspLink"
-            const val route = "$ROUTE/{$NAME}/{$LOCATION}/{$RTSP_LINK}"
+            private const val ROUTE = "search_result"
+            const val FROM = "from"
+            const val TO = "to"
+            const val route = "$ROUTE/{$FROM}/{$TO}"
             val arguments = listOf(
-                navArgument(NAME) { type = NavType.StringType }
+                navArgument(FROM) { type = NavType.StringType },
+                navArgument(TO) { type = NavType.StringType }
             )
 
-            //fun navigate(name: String, location: String, rtspLink: String) =
-                //"$ROUTE/${name.encodeForNavigation()}/${location.encodeForNavigation()}/${rtspLink.encodeForNavigation()}"
+            fun navigate(from: String, to: String) = "$ROUTE/$from/$to"
         }
     }
 
@@ -45,11 +43,11 @@ sealed class Screen(
             when (route) {
                 Empty.route -> Empty
                 Main.route -> Main
+                SearchResult.route -> SearchResult()
                 Hotels.route -> Hotels
                 Shortly.route -> Shortly
                 Subscribes.route -> Subscribes
                 Profile.route -> Profile
-                CameraStream.route -> CameraStream()
                 null -> Empty
                 else -> throw IllegalArgumentException("Route $route is not recognized.")
             }
