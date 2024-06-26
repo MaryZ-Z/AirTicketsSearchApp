@@ -47,8 +47,11 @@ import com.android.airticketssearchapp.R
 import com.android.airticketssearchapp.data.Hints
 import com.android.airticketssearchapp.data.Offer
 import com.android.airticketssearchapp.data.OfferImage
+import com.android.airticketssearchapp.data.OffersResponse
 import com.android.airticketssearchapp.data.Popular
 import com.android.airticketssearchapp.navigation.Screen
+import com.android.airticketssearchapp.ui.common.UiState
+import com.android.airticketssearchapp.ui.components.Loading
 import com.android.airticketssearchapp.ui.theme.Black
 import com.android.airticketssearchapp.ui.theme.Grey2
 import com.android.airticketssearchapp.ui.theme.Grey3
@@ -97,12 +100,14 @@ fun MainScreen(navigate: (String) -> Unit) {
             textAlign = TextAlign.Start
         )
         Spacer(modifier = Modifier.height(19.dp))
-        RowOffers(
-            items = viewModel.state.getIfSuccess()?.offers ?: emptyList()
-        )
+        when(val state = viewModel.state) {
+            is UiState.Success -> RowOffers(items = state.data)
+            is UiState.Loading -> Loading()
+            else -> Loading() // по идее, тут нужен экран с ошибкой, но фигмой это не предусмотрено
+        }
     }
 
-    if (viewModel.showSearchBottomSheet) {
+    if (viewModel.isSearchBottomSheetShowing) {
         SearchBottomSheet(
             onDismissClick = viewModel::hideSearchBottomSheet,
             onPopularClick = {
@@ -119,7 +124,8 @@ fun MainScreen(navigate: (String) -> Unit) {
             onFromTextChange = viewModel::updateFrom,
             onToTextChange = viewModel::updateTo,
             onIconClick = viewModel::clearTo,
-            navigate = navigate
+            navigate = navigate,
+            state = viewModel.state
         )
     }
 }
@@ -195,14 +201,14 @@ fun TextFields(
 
 @Composable
 fun RowOffers(
-    items: List<Offer>
+    items: OffersResponse
 ) {
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(67.dp)
     ) {
-        items(items) { item ->
+        items(items.offers) { item ->
             OfferCard(item = item)
         }
     }
@@ -263,7 +269,8 @@ fun SearchBottomSheet(
     toText: String,
     onFromTextChange: (String) -> Unit,
     onToTextChange: (String) -> Unit,
-    navigate: (String) -> Unit
+    navigate: (String) -> Unit,
+    state: UiState<OffersResponse>
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
@@ -280,7 +287,7 @@ fun SearchBottomSheet(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(all = 16.dp),
+                    .padding(horizontal = 16.dp),
                 shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = Grey3
@@ -315,7 +322,10 @@ fun SearchBottomSheet(
             Spacer(modifier = Modifier.height(24.dp))
             RowHints(navigate = navigate, fromText = fromText)
             Spacer(modifier = Modifier.height(30.dp))
-            Popular(onClick = onPopularClick)
+            when(state) {
+                UiState.Loading -> Loading()
+                is UiState.Success -> Popular(onClick = onPopularClick)
+            }
         }
     }
 }
@@ -483,7 +493,7 @@ fun Popular(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(all = 16.dp),
+            .padding(horizontal = 16.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = Grey3

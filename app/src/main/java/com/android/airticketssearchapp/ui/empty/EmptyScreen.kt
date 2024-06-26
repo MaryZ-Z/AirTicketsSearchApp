@@ -37,7 +37,8 @@ fun EmptyScreen(navigate: () -> Unit) {
         )
         Button(
             textResId = R.string.empty_back_button,
-            onClick = navigate
+            onClick = navigate,
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }

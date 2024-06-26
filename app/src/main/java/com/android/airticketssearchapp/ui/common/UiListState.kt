@@ -8,6 +8,4 @@ sealed interface UiListState<out T> {
     data class Success<T>(val data: OffersResponse) : UiListState<T>
 
     data object Empty : UiListState<Nothing>
-
-    data class Error(val uiError: UiError) : UiListState<Nothing>
 }

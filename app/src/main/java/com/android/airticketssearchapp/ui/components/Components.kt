@@ -20,18 +20,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -62,10 +60,7 @@ import com.android.airticketssearchapp.ui.theme.AirTicketsSearchAppTheme
 import com.android.airticketssearchapp.ui.theme.Black
 import com.android.airticketssearchapp.ui.theme.Blue
 import com.android.airticketssearchapp.ui.theme.Grey1
-import com.android.airticketssearchapp.ui.theme.Grey3
-import com.android.airticketssearchapp.ui.theme.Grey4
 import com.android.airticketssearchapp.ui.theme.Grey5
-import com.android.airticketssearchapp.ui.theme.Grey6
 import com.android.airticketssearchapp.ui.theme.Grey7
 import com.android.airticketssearchapp.ui.theme.White
 
@@ -166,7 +161,7 @@ fun BottomNavigation(content: @Composable RowScope.() -> Unit) {
 }
 
 /* на material3 не завезли возможность убирать подсветку у выбранного пункта, поэтому кастомный боттом бар,
-   можно было использовать material2, но это слишком просто :)
+   можно было использовать material2, но какой смысл, если везде 3
    P.S. иконка самолета странная, пришлось задать явный размер иконок, чтоб отображалось ровно и корректно
    Выглядит всё равно она странно */
 
@@ -274,19 +269,24 @@ fun AirTicketsSearchNavHost(
 }
 
 @Composable
-fun Button(textResId: Int, onClick: () -> Unit) {
+fun Button(textResId: Int, onClick: () -> Unit, color: Color) {
     Button(
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(all = 16.dp),
-        shape = RoundedCornerShape(16.dp),
-        contentPadding = PaddingValues(vertical = 12.dp)
+            .padding(horizontal = 16.dp),
+        shape = RoundedCornerShape(8.dp),
+        contentPadding = PaddingValues(vertical = 11.dp),
+        colors = ButtonColors(
+            containerColor = color,
+            contentColor = White,
+            disabledContainerColor = color,
+            disabledContentColor = White
+        )
     ) {
         Text(
             text = stringResource(id = textResId),
-            style = MaterialTheme.typography.labelMedium,
-            color = White
+            style = MaterialTheme.typography.headlineSmall
         )
     }
 }

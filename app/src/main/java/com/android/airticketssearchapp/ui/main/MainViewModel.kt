@@ -26,13 +26,13 @@ class MainViewModel @Inject constructor(
         private set
     var to by mutableStateOf("")
         private set
-    var showSearchBottomSheet by mutableStateOf(false)
+    var isSearchBottomSheetShowing by mutableStateOf(false)
         private set
     private val ignoredRegex = Regex( //костыль, но пока лучше идей нет
         "[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789]"
     )
     private val handler = CoroutineExceptionHandler { _, _ ->
-        // TODO infinite loading when cache is empty and request was unsuccessful
+        // TODO
     }
 
     init {
@@ -71,10 +71,10 @@ class MainViewModel @Inject constructor(
     }
 
     fun showSearchBottomSheet() {
-        showSearchBottomSheet = true
+        isSearchBottomSheetShowing = true
     }
 
     fun hideSearchBottomSheet() {
-        showSearchBottomSheet = false
+        isSearchBottomSheetShowing = false
     }
 }

@@ -5,8 +5,6 @@ sealed interface UiState<out T> {
 
     data class Success<T>(val data: T) : UiState<T>
 
-    data class Error(val uiError: UiError) : UiState<Nothing>
-
     fun runIfSuccess(block: (T) -> Unit) {
         if (this is Success) block(data)
     }

@@ -29,6 +29,18 @@
     <string name="main_popular_phuket">Пхукет</string>
     <string name="main_popular_description">Популярное направление</string>
 
+    <!-- search result screen -->
+    <string name="search_result_title">Прямые рейсы</string>
+    <string name="search_result_price">%s %s ₽</string>
+    <string name="search_result_date_picker_dialog_confirm_button">Ок</string>
+    <string name="search_result_date_picker_dialog_dismiss_button">Отмена</string>
+    <string name="search_result_chip_return_date">обратно</string>
+    <string name="search_result_chip_passenger">1,эконом</string>
+    <string name="search_result_chip_filter">фильтры</string>
+    <string name="search_result_button">Посмотреть все билеты</string>
+    <string name="search_result_chip_date">%s, %s</string>
+    <string name="search_result_chip_date_annotated">, %s</string>
+
     <!-- empty screen -->
     <string name="empty_title">Экран в разработке</string>
     <string name="empty_text">Возвращайтесь позже, здесь обязательно будет что-то интересное!\nА пока можете вернуться назад</string>

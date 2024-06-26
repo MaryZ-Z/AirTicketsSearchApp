@@ -9,4 +9,6 @@ class AirTicketsSearchRepository @Inject constructor(
     private val airTicketsSearchService: AirTicketsSearchService
 ) {
     suspend fun getOffers() = airTicketsSearchService.getOffers()
+
+    suspend fun getSearchResults() = airTicketsSearchService.getSearchResults()
 }
