@@ -70,6 +70,8 @@ fun SearchResultScreen(
 ) {
     val viewModel: SearchResultViewModel = hiltViewModel()
     val datePickerState = rememberDatePickerState()
+    val from = viewModel.localFrom
+    val to = viewModel.localTo
 
     Column(
         modifier = Modifier
@@ -83,18 +85,16 @@ fun SearchResultScreen(
             },
             onBackClick = navigateBack,
             onSwitchClick = viewModel::switchFromTo,
-            fromText = viewModel.localFrom,
-            toText = viewModel.localTo
+            fromText = from,
+            toText = to
         )
         ChipGroup(
             date = viewModel.date,
             returnDate = viewModel.returnDate,
             onReturnDateClick = viewModel::showReturnDatePickerDialog,
-            onDateClick = viewModel::showDatePickerDialog,
-            onFilterClick = { navigate(Screen.Empty.route) }
+            onDateClick = viewModel::showDatePickerDialog
         )
         Spacer(modifier = Modifier.height(6.dp))
-        // todo туду тудутудутудyyyу ту ду ту ду тудутудутудутуду тудуууууу тудутуду
         when (val state = viewModel.state) {
             is UiState.Success -> SearchResult(items = state.data)
             is UiState.Loading -> Loading()
@@ -102,7 +102,14 @@ fun SearchResultScreen(
         Spacer(modifier = Modifier.height(23.dp))
         Button(
             textResId = R.string.search_result_button,
-            onClick = { navigate(Screen.Empty.route) },
+            onClick = {
+                navigate(Screen.AllTickets.navigate(
+                    from = from,
+                    to = to,
+                    date = viewModel.date.toString(),
+                    returnDate = viewModel.returnDate?.toString()
+                ))
+            },
             color = MaterialTheme.colorScheme.primary
         )
     }
@@ -189,8 +196,7 @@ fun ChipGroup(
     date: LocalDate,
     returnDate: LocalDate?,
     onReturnDateClick: () -> Unit,
-    onDateClick: () -> Unit,
-    onFilterClick: () -> Unit
+    onDateClick: () -> Unit
 ) {
     //todo не красится текст в чипсах, разобраться потом
     val departureDate: AnnotatedString = buildAnnotatedString {
@@ -272,8 +278,9 @@ fun ChipGroup(
         item {
             Chip(
                 label = stringResource(id = R.string.search_result_chip_filter),
-                onClick = onFilterClick,
-                iconResId = R.drawable.ic_filter
+                onClick = { },
+                iconResId = R.drawable.ic_filter,
+                isEnabled = false
             )
         }
     }

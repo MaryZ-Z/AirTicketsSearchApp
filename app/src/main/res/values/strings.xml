@@ -41,6 +41,17 @@
     <string name="search_result_chip_date">%s, %s</string>
     <string name="search_result_chip_date_annotated">, %s</string>
 
+    <!-- all tickets screen -->
+    <string name="all_tickets_from_to">%s-%s</string>
+    <string name="all_tickets_date">%s, 1 пассажир</string>
+    <string name="all_tickets_date_with_return">%s, %s, 1 пассажир</string>
+    <string name="all_tickets_dash">—</string>
+    <string name="all_tickets_slash">/</string>
+    <string name="all_tickets_time_on_way">%sч в пути</string>
+    <string name="all_tickets_without_transfer">Без пересадок</string>
+    <string name="all_tickets_filter">Фильтры</string>
+    <string name="all_tickets_prices">График цен</string>
+
     <!-- empty screen -->
     <string name="empty_title">Экран в разработке</string>
     <string name="empty_text">Возвращайтесь позже, здесь обязательно будет что-то интересное!\nА пока можете вернуться назад</string>

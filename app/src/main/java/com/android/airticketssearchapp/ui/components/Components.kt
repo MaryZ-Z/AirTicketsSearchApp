@@ -53,6 +53,7 @@ import com.android.airticketssearchapp.extensions.currentScreen
 import com.android.airticketssearchapp.extensions.hasRouteInHierarchy
 import com.android.airticketssearchapp.navigation.BottomNavigation
 import com.android.airticketssearchapp.navigation.Screen
+import com.android.airticketssearchapp.ui.alltickets.AllTicketsScreen
 import com.android.airticketssearchapp.ui.empty.EmptyScreen
 import com.android.airticketssearchapp.ui.main.MainScreen
 import com.android.airticketssearchapp.ui.searchresult.SearchResultScreen
@@ -77,7 +78,7 @@ fun AirTicketsSearchApp() {
         Scaffold(
             topBar = {
                 Column {
-                    AnimatedVisibility(visible = currentScreen.titleResId != null) {
+                    AnimatedVisibility(visible = currentScreen.isTopBarVisible) {
                         TopAppBar(title = currentScreen.titleResId?.let { stringResource(it) }
                             ?: "")
                     }
@@ -223,6 +224,13 @@ fun AirTicketsSearchNavHost(
                     navigate = navController::navigate,
                     navigateBack = navController::popBackStack
                 )
+            }
+
+            composable(
+                route = Screen.AllTickets.route,
+                arguments = Screen.AllTickets.arguments
+            ) {
+                AllTicketsScreen(navigateBack = navController::popBackStack)
             }
 
             composable(route = Screen.Empty.route) {

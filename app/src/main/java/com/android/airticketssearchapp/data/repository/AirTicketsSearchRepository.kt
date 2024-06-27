@@ -11,4 +11,6 @@ class AirTicketsSearchRepository @Inject constructor(
     suspend fun getOffers() = airTicketsSearchService.getOffers()
 
     suspend fun getSearchResults() = airTicketsSearchService.getSearchResults()
+
+    suspend fun getAllTickets() = airTicketsSearchService.getAllTickets()
 }

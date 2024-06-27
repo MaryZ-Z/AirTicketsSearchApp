@@ -26,3 +26,5 @@ val Green = Color(0xFF3A633B)
 val DarkGreen = Color(0xFF1E341F)
 val Red = Color(0xFFFF5E5E)
 val Orange = Color(0xFFF36E36)
+
+val BlueForIcon = Color(0xFF2261BC) // на экране всех билетов цвет иконки не из цветовой схемы фигмы

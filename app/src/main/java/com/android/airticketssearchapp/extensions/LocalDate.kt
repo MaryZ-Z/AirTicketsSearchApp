@@ -9,6 +9,11 @@ import java.util.Locale
 
 fun LocalDate.monthNameWithDay() = "$dayOfMonth ${month.abbreviation()}"
 
+fun LocalDate.fullMonthNameWithDay() = "$dayOfMonth ${month.full()}".lowercase()
+
+fun Month.full(): String =
+    getDisplayName(TextStyle.FULL, Locale.getDefault()).trimEnd('.')
+
 fun Month.abbreviation(): String =
     getDisplayName(TextStyle.SHORT, Locale.getDefault()).trimEnd('.')
 

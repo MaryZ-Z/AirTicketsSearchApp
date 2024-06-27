@@ -8,7 +8,7 @@ import com.android.airticketssearchapp.R
 sealed class Screen(
     val route: String,
     @StringRes val titleResId: Int? = null,
-    isTopBarVisible: Boolean = true
+    val isTopBarVisible: Boolean = true
 ) {
 
     data object Empty : Screen(route = "empty")
@@ -30,6 +30,29 @@ sealed class Screen(
         }
     }
 
+    class AllTickets : Screen(route = route, isTopBarVisible = false) {
+        companion object {
+            private const val ROUTE = "all_tickets"
+            const val FROM = "from"
+            const val TO = "to"
+            const val DATE = "date"
+            const val RETURN_DATE = "return_date"
+            const val route = "$ROUTE/{$FROM}/{$TO}/{$DATE}/{$RETURN_DATE}"
+            val arguments = listOf(
+                navArgument(FROM) { type = NavType.StringType },
+                navArgument(TO) { type = NavType.StringType },
+                navArgument(DATE) { type = NavType.StringType },
+                navArgument(RETURN_DATE) {
+                    type = NavType.StringType
+                    nullable = true
+                }
+            )
+
+            fun navigate(from: String, to: String, date: String, returnDate: String?) =
+                "$ROUTE/$from/$to/$date/$returnDate"
+        }
+    }
+
     data object Hotels : Screen(route = "hotels", titleResId = R.string.navigation_hotels_label)
 
     data object Shortly : Screen(route = "shortly", titleResId = R.string.navigation_shortly_label)
@@ -44,6 +67,7 @@ sealed class Screen(
                 Empty.route -> Empty
                 Main.route -> Main
                 SearchResult.route -> SearchResult()
+                AllTickets.route -> AllTickets()
                 Hotels.route -> Hotels
                 Shortly.route -> Shortly
                 Subscribes.route -> Subscribes
